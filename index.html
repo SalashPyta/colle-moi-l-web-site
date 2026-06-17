@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Colle moi l'web — plugin Premiere Pro</title>
+<style>
+  :root{
+    --bg:#07100b; --txt:#eaf5ee; --muted:#7a9988; --label:#5a7d68;
+    --field:#0c1a12; --field-bd:#1c3a28; --green:#46e08a; --green-bright:#7df0a6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"Segoe UI",Roboto,sans-serif;
+    background-image:radial-gradient(rgba(70,224,138,.09) 1px,transparent 1px);
+    background-size:24px 24px;}
+  .wrap{max-width:560px;margin:0 auto;padding:56px 22px 40px;}
+  .kicker{font-size:12px;font-weight:600;letter-spacing:4px;color:var(--green);
+    text-transform:uppercase;opacity:.85;text-align:center}
+  h1{font-size:46px;line-height:1.02;font-weight:800;letter-spacing:.5px;
+    text-transform:uppercase;text-align:center;margin:10px 0 14px;color:#fff;
+    text-shadow:0 0 28px rgba(70,224,138,.3)}
+  .sub{text-align:center;color:var(--muted);font-size:15px;line-height:1.5;max-width:420px;margin:0 auto 30px}
+  .feat{display:flex;flex-direction:column;gap:10px;margin:0 auto 32px;max-width:400px}
+  .feat div{display:flex;align-items:center;gap:11px;font-size:14px;color:#cfe6d8}
+  .feat .ic{color:var(--green-bright);font-weight:800}
+  .card{background:var(--field);border:1px solid var(--field-bd);border-radius:16px;padding:26px 22px}
+  label.l{display:block;font-size:11px;font-weight:600;letter-spacing:2px;color:var(--label);
+    text-transform:uppercase;margin:0 0 7px}
+  input[type=text],input[type=email]{width:100%;background:#0a1610;border:1px solid var(--field-bd);
+    border-radius:10px;padding:13px 14px;color:var(--txt);font-size:15px;outline:none;margin-bottom:16px;
+    transition:border-color .15s,box-shadow .15s}
+  input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(70,224,138,.12)}
+  .consent{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.45}
+  .consent input{margin-top:2px;accent-color:var(--green)}
+  button{width:100%;border:none;border-radius:999px;padding:16px;font-size:16px;font-weight:800;
+    letter-spacing:.5px;text-transform:uppercase;color:#06140b;cursor:pointer;
+    background:linear-gradient(120deg,#36c878,#5fe095,#8af3ab);
+    box-shadow:0 0 28px rgba(70,224,138,.4);transition:transform .12s,box-shadow .12s,filter .12s}
+  button:hover{transform:translateY(-1px);box-shadow:0 0 40px rgba(70,224,138,.55)}
+  button:disabled{filter:grayscale(.4) brightness(.8);cursor:default}
+  .err{color:#ff7a7a;font-size:13px;margin-top:12px;text-align:center;display:none}
+  /* succès */
+  #success{display:none}
+  .ok-badge{text-align:center;font-size:13px;color:var(--green-bright);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;margin-bottom:18px}
+  .step{margin-bottom:22px}
+  .step h3{font-size:13px;color:var(--green-bright);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+  .cmd{display:flex;gap:8px;align-items:stretch}
+  .cmd code{flex:1;background:#0a1610;border:1px solid var(--field-bd);border-radius:10px;
+    padding:13px 14px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--green-bright);
+    overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+  .copy{flex:none;width:auto;padding:0 16px;font-size:12px;border-radius:10px}
+  .hint{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:9px}
+  .foot{text-align:center;margin-top:34px;font-size:12px;color:var(--muted)}
+  .foot b{color:var(--green-bright)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Plugin Premiere Pro</div>
+  <h1>Colle moi<br>l'web</h1>
+  <p class="sub">Copie une image sur le web, fais <b>Cmd/Ctrl+V</b> dans ta timeline — elle se télécharge et se pose toute seule sur une piste libre.</p>
+
+  <div class="feat">
+    <div><span class="ic">✓</span> Téléchargement + import automatiques</div>
+    <div><span class="ic">✓</span> Rangée dans un chutier « image web »</div>
+    <div><span class="ic">✓</span> Posée au playhead, sur une piste libre</div>
+    <div><span class="ic">✓</span> Mac & Windows · Premiere 2023+</div>
+  </div>
+
+  <div class="card">
+    <!-- formulaire (Netlify Forms) -->
+    <form id="form" name="access" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="access" />
+      <p style="display:none"><label>Ne pas remplir : <input name="bot-field" /></label></p>
+
+      <label class="l" for="name">Ton prénom</label>
+      <input type="text" id="name" name="name" required placeholder="Sacha" />
+
+      <label class="l" for="email">Ton email</label>
+      <input type="email" id="email" name="email" required placeholder="toi@exemple.com" />
+
+      <label class="consent">
+        <input type="checkbox" name="consent" required />
+        <span>J'accepte de recevoir l'installation et des nouvelles du plugin par email. Désinscription possible à tout moment.</span>
+      </label>
+
+      <button type="submit" id="submit">Obtenir l'installation</button>
+      <div class="err" id="err">Une erreur est survenue, réessaie.</div>
+    </form>
+
+    <!-- succès -->
+    <div id="success">
+      <div class="ok-badge">✅ C'est à toi ! Merci 🙌</div>
+
+      <div class="step">
+        <h3>🍎 Sur Mac</h3>
+        <div class="cmd">
+          <code id="macCmd">curl -sL https://raw.githubusercontent.com/SalashPyta/colle-moi-l-web/main/install.sh | bash</code>
+          <button class="copy" type="button" onclick="cp('macCmd',this)">Copier</button>
+        </div>
+        <p class="hint">Ouvre l'app <b>Terminal</b>, colle la ligne, Entrée. Une fenêtre te guidera pour l'autorisation (comme Raycast).</p>
+      </div>
+
+      <div class="step">
+        <h3>🪟 Sur Windows</h3>
+        <div class="cmd">
+          <code id="winCmd">powershell -c "iwr -useb https://raw.githubusercontent.com/SalashPyta/colle-moi-l-web/main/install.ps1 | iex"</code>
+          <button class="copy" type="button" onclick="cp('winCmd',this)">Copier</button>
+        </div>
+        <p class="hint">Ouvre <b>PowerShell</b>, colle la ligne, Entrée.</p>
+      </div>
+
+      <p class="hint">Puis relance Premiere → <b>Fenêtre ▸ Extensions ▸ Colle moi l'web</b>. Copie une image, Cmd/Ctrl+V dans la timeline ✨</p>
+    </div>
+  </div>
+
+  <div class="foot">Par <b>Salash</b> &amp; <b>Pytanix</b></div>
+</div>
+
+<script>
+  function cp(id,btn){
+    var t=document.getElementById(id).textContent;
+    navigator.clipboard.writeText(t).then(function(){
+      var o=btn.textContent;btn.textContent="Copié ✓";
+      setTimeout(function(){btn.textContent=o;},1500);
+    });
+  }
+  var form=document.getElementById("form");
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var btn=document.getElementById("submit");
+    btn.disabled=true;btn.textContent="Envoi…";
+    var data=new URLSearchParams(new FormData(form)).toString();
+    fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:data})
+      .then(function(r){
+        if(!r.ok) throw new Error("net");
+        form.style.display="none";
+        document.getElementById("success").style.display="block";
+      })
+      .catch(function(){
+        document.getElementById("err").style.display="block";
+        btn.disabled=false;btn.textContent="Obtenir l'installation";
+      });
+  });
+</script>
+</body>
+</html>
